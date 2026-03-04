@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Checklist 4.0 Ultra</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🚀 Checklist 4.0 Ultra</h1>
+
+<div class="stats">
+    <div id="counter">0 задач</div>
+    <div id="percent">0%</div>
+</div>
+
+<div class="progress-bar">
+    <div id="progressFill"></div>
+</div>
+
+<div class="input-panel">
+    <input id="taskInput" placeholder="Новая задача...">
+    <button onclick="addTask()">+</button>
+</div>
+
+<div class="filters">
+    <button onclick="setFilter('all')">Все</button>
+    <button onclick="setFilter('active')">Активные</button>
+    <button onclick="setFilter('done')">Выполненные</button>
+</div>
+
+<div id="tasks"></div>
+
+<div class="streak">
+    🔥 Streak: <span id="streak">0</span> дней
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
