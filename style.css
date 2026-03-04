@@ -1,0 +1,90 @@
+body {
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 20px;
+    transition: 0.3s;
+}
+
+h1 {
+    text-align: center;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--tg-theme-secondary-bg-color);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+#progressFill {
+    height: 100%;
+    width: 0%;
+    background: var(--tg-theme-button-color);
+    transition: width 0.3s ease;
+}
+
+.input-panel {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+}
+
+button {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: none;
+    background: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.task {
+    background: var(--tg-theme-secondary-bg-color);
+    padding: 12px;
+    border-radius: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.task.removing {
+    animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeIn {
+    from {opacity:0; transform:translateY(5px);}
+    to {opacity:1; transform:translateY(0);}
+}
+
+@keyframes fadeOut {
+    to {opacity:0; transform:translateX(50px);}
+}
+
+.streak {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
