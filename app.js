@@ -1,104 +1,122 @@
-let tg = window.Telegram.WebApp;
-tg.expand();
-
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-let streak = JSON.parse(localStorage.getItem("streak")) || 0;
-let lastCompleteDate = localStorage.getItem("lastCompleteDate");
-let currentFilter = "all";
+let filter = "all";
 
-function save() {
+function saveTasks() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-    localStorage.setItem("streak", JSON.stringify(streak));
 }
 
 function addTask() {
-    const text = document.getElementById("taskInput").value.trim();
-    if (!text) return;
 
-    tasks.push({text, done:false});
-    document.getElementById("taskInput").value = "";
-    save();
-    render();
+    let input = document.getElementById("taskInput");
+
+    if (input.value.trim() === "") return;
+
+    tasks.push({
+        text: input.value,
+        done: false
+    });
+
+    input.value = "";
+
+    saveTasks();
+    renderTasks();
+    updateStats();
 }
 
 function toggleTask(index) {
+
     tasks[index].done = !tasks[index].done;
 
-    if (tasks[index].done) updateStreak();
-
-    save();
-    render();
+    saveTasks();
+    renderTasks();
+    updateStats();
 }
 
 function deleteTask(index) {
-    const taskElements = document.querySelectorAll(".task");
-    taskElements[index].classList.add("removing");
 
-    setTimeout(() => {
-        tasks.splice(index,1);
-        save();
-        render();
-    }, 300);
+    tasks.splice(index, 1);
+
+    saveTasks();
+    renderTasks();
+    updateStats();
 }
 
-function setFilter(filter) {
-    currentFilter = filter;
-    render();
+function setFilter(type) {
+
+    filter = type;
+
+    renderTasks();
 }
 
-function updateStats() {
-    const total = tasks.length;
-    const done = tasks.filter(t=>t.done).length;
+function renderTasks() {
 
-    document.getElementById("counter").innerText = `${total} задач`;
-    const percent = total ? Math.round(done/total*100) : 0;
-    document.getElementById("percent").innerText = percent + "%";
-    document.getElementById("progressFill").style.width = percent + "%";
-}
+    let container = document.getElementById("tasks");
 
-function updateStreak() {
-    const today = new Date().toDateString();
-
-    if (lastCompleteDate !== today) {
-        streak++;
-        lastCompleteDate = today;
-        localStorage.setItem("lastCompleteDate", today);
-    }
-
-    document.getElementById("streak").innerText = streak;
-}
-
-function render() {
-    const container = document.getElementById("tasks");
     container.innerHTML = "";
 
-    let filtered = tasks.filter(t=>{
-        if(currentFilter==="active") return !t.done;
-        if(currentFilter==="done") return t.done;
+    let filtered = tasks.filter(task => {
+
+        if (filter === "active") return !task.done;
+        if (filter === "done") return task.done;
+
         return true;
     });
 
-    filtered.forEach((task,index)=>{
-        container.innerHTML += `
-            <div class="task">
-                <div onclick="toggleTask(${index})">
-                    ${task.done ? "✅" : "⬜"} ${task.text}
-                </div>
-                <button onclick="deleteTask(${index})">🗑</button>
-            </div>
+    filtered.forEach((task, i) => {
+
+        let realIndex = tasks.indexOf(task);
+
+        let div = document.createElement("div");
+        div.className = "task";
+
+        if (task.done) div.classList.add("done");
+
+        div.innerHTML = `
+        <span onclick="toggleTask(${realIndex})">
+        ${task.done ? "✅" : "⬜"} ${task.text}
+        </span>
+        <button onclick="deleteTask(${realIndex})">🗑</button>
         `;
+
+        container.appendChild(div);
+
     });
 
-    updateStats();
-    document.getElementById("streak").innerText = streak;
 }
 
-render();
-new Sortable(document.getElementById("tasks"), {
-    animation: 150,
-    onEnd: function (evt) {
-        const movedItem = tasks.splice(evt.oldIndex, 1)[0];
-        tasks.splice(evt.newIndex, 0, movedItem);
-        save();
+function updateStats() {
+
+    let done = tasks.filter(t => t.done).length;
+    let total = tasks.length;
+
+    let percent = total === 0 ? 0 : Math.round(done / total * 100);
+
+    document.getElementById("counter").innerText = total + " задач";
+    document.getElementById("percent").innerText = percent + "%";
+
+    document.getElementById("progressFill").style.width = percent + "%";
+
+    if (percent === 100 && total > 0) {
+
+        let streak = Number(localStorage.getItem("streak") || 0);
+        streak++;
+
+        localStorage.setItem("streak", streak);
+
+        document.getElementById("streak").innerText = streak;
+
+    } else {
+
+        document.getElementById("streak").innerText =
+            localStorage.getItem("streak") || 0;
+
     }
+
+}
+
+renderTasks();
+updateStats();
+
+new Sortable(tasks, {
+    animation: 150
 });
