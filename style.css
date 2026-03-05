@@ -159,3 +159,50 @@ button:hover {
     gap: 10px;
     margin-top: 10px;
 }
+
+/* чтобы задачи не прятались под нижней панелью */
+
+#tasks {
+    padding-bottom: 80px;
+}
+
+/* нижняя панель добавления задачи */
+
+.task-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0f0f10;
+    padding: 12px 20px;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #222;
+}
+
+/* красивый фокус для input */
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #7b1e3a;
+}
+
+/* плавная анимация задач */
+
+.task {
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
