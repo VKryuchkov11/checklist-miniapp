@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let filter = "all";
 
@@ -45,7 +44,6 @@ function deleteTask(index) {
 function setFilter(type) {
 
     filter = type;
-
     renderTasks();
 }
 
@@ -63,7 +61,7 @@ function renderTasks() {
         return true;
     });
 
-    filtered.forEach((task, i) => {
+    filtered.forEach((task) => {
 
         let realIndex = tasks.indexOf(task);
 
@@ -117,6 +115,3 @@ function updateStats() {
 
 renderTasks();
 updateStats();
-
-new Sortable(tasks, {
-    animation: 150
