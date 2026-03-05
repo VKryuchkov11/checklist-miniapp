@@ -150,3 +150,12 @@ button:hover {
     text-align: center;
     font-size: 18px;
 }
+.task-panel {
+    position: sticky;
+    bottom: 0;
+    background: #0f0f10;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
