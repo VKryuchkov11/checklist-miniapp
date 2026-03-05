@@ -1,8 +1,6 @@
 import asyncio
 import os
 from dotenv import load_dotenv
-from database import init_db
-from reminders import reminder_loop
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
@@ -10,12 +8,12 @@ from aiogram.filters import Command
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
+from database import init_db
+from reminders import reminder_loop
+
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-
-if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN не найден! Проверь .env")
 
 bot = Bot(
     token=BOT_TOKEN,
@@ -27,6 +25,7 @@ dp = Dispatcher()
 
 @dp.message(Command("start"))
 async def start(message: Message):
+
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
             [
@@ -49,9 +48,9 @@ async def start(message: Message):
 
 
 async def main():
-    await dp.start_polling(bot)
+
     await init_db()
-    await dp.start_polling(bot)
+
     asyncio.create_task(reminder_loop(bot))
 
     await dp.start_polling(bot)

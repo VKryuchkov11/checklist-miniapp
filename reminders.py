@@ -1,11 +1,10 @@
 import asyncio
 import aiosqlite
-from aiogram import Bot
+from datetime import datetime
+from database import DB_NAME
 
-DB_NAME = "checklist.db"
 
-
-async def reminder_loop(bot: Bot):
+async def reminder_loop(bot):
 
     while True:
 
@@ -14,16 +13,19 @@ async def reminder_loop(bot: Bot):
             async with db.execute("""
             SELECT user_id, text
             FROM tasks
-            WHERE reminder_time <= datetime('now')
+            WHERE reminder_time <= ?
             AND done = 0
-            """) as cursor:
+            """, (datetime.now().isoformat(),)) as cursor:
 
                 rows = await cursor.fetchall()
 
                 for user_id, text in rows:
-                    await bot.send_message(
-                        user_id,
-                        f"⏰ Напоминание:\n{text}"
-                    )
+                    try:
+                        await bot.send_message(
+                            user_id,
+                            f"⏰ Напоминание:\n{text}"
+                        )
+                    except:
+                        pass
 
         await asyncio.sleep(60)

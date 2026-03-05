@@ -1,8 +1,10 @@
 from fastapi import FastAPI
-from database import SessionLocal
-from models import User
+import aiosqlite
+
+DB_NAME = "checklist.db"
 
 app = FastAPI()
+
 
 @app.get("/")
 async def root():
@@ -15,22 +17,21 @@ async def auth(data: dict):
     telegram_id = data["id"]
     name = data["first_name"]
 
-    db = SessionLocal()
+    async with aiosqlite.connect(DB_NAME) as db:
 
-    try:
+        cursor = await db.execute(
+            "SELECT id FROM users WHERE telegram_id=?",
+            (telegram_id,)
+        )
 
-        user = db.query(User).filter(User.telegram_id == telegram_id).first()
+        user = await cursor.fetchone()
 
         if not user:
-            user = User(
-                telegram_id=telegram_id,
-                name=name
+            await db.execute(
+                "INSERT INTO users (telegram_id, name) VALUES (?, ?)",
+                (telegram_id, name)
             )
 
-            db.add(user)
-            db.commit()
+            await db.commit()
 
-        return {"status": "ok"}
-
-    finally:
-        db.close()
+    return {"status": "ok"}

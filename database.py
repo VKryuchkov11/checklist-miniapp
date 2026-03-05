@@ -8,15 +8,8 @@ async def init_db():
 
         await db.execute("""
         CREATE TABLE IF NOT EXISTS users(
-            id INTEGER PRIMARY KEY,
-            telegram_id INTEGER UNIQUE
-        )
-        """)
-
-        await db.execute("""
-        CREATE TABLE IF NOT EXISTS categories(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
+            telegram_id INTEGER UNIQUE,
             name TEXT
         )
         """)
@@ -25,7 +18,6 @@ async def init_db():
         CREATE TABLE IF NOT EXISTS tasks(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
-            category_id INTEGER,
             text TEXT,
             done INTEGER DEFAULT 0,
             reminder_time TEXT

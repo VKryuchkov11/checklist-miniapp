@@ -8,7 +8,7 @@ async function authUser() {
 
     if (!user) return;
 
-    await fetch("https://checklist-miniapp.onrender.com/auth", {
+    await fetch("https://checklist-miniapp.onrender.com/auth", {", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from tasksdb import Base
+from database import Base
 
 
 class User(Base):
@@ -8,7 +8,6 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     telegram_id = Column(Integer, unique=True)
-    name = Column(String)
 
     categories = relationship("Category", back_populates="user")
 
