@@ -1,17 +1,35 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+import aiosqlite
 
-DATABASE_URL = "sqlite:///checklist.db"
+DB_NAME = "checklist.db"
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False}
-)
 
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+async def init_db():
+    async with aiosqlite.connect(DB_NAME) as db:
 
-Base = declarative_base()
+        await db.execute("""
+        CREATE TABLE IF NOT EXISTS users(
+            id INTEGER PRIMARY KEY,
+            telegram_id INTEGER UNIQUE
+        )
+        """)
+
+        await db.execute("""
+        CREATE TABLE IF NOT EXISTS categories(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            name TEXT
+        )
+        """)
+
+        await db.execute("""
+        CREATE TABLE IF NOT EXISTS tasks(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            category_id INTEGER,
+            text TEXT,
+            done INTEGER DEFAULT 0,
+            reminder_time TEXT
+        )
+        """)
+
+        await db.commit()
