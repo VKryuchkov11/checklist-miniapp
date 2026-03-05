@@ -1,7 +1,7 @@
 import asyncio
 import os
 from dotenv import load_dotenv
-from backend.database import init_db
+from database import init_db
 from reminders import reminder_loop
 
 from aiogram import Bot, Dispatcher

@@ -8,16 +8,19 @@ async function authUser() {
 
     if (!user) return;
 
-    await fetch("http://localhost:8000/auth", {
+    await fetch("https://checklist-api.onrender.com/auth", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            telegram_id: user.id
+            id: user.id,
+            first_name: user.first_name
         })
-    });
-
+    })
+    .then(res => res.json())
+    .then(data => console.log("Auth response:", data))
+    .catch(err => console.error(err));
 }
 
 authUser();

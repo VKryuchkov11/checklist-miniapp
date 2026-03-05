@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from backend.database import SessionLocal
-from backend.models import User, Task
+from database import SessionLocal
+from models import User, Task
 
 app = FastAPI()
 
