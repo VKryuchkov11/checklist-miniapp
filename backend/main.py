@@ -4,6 +4,10 @@ from models import User
 
 app = FastAPI()
 
+@app.get("/")
+async def root():
+    return {"status": "server working"}
+
 
 @app.post("/auth")
 async def auth(data: dict):

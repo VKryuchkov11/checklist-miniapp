@@ -1,15 +1,43 @@
 from fastapi import FastAPI
-from database import SessionLocal
-from models import Task
+from backend.database import SessionLocal
+from backend.models import User, Task
 
 app = FastAPI()
 
-@app.get("/tasks/{user_id}")
-def get_tasks(user_id: int):
+
+@app.post("/auth")
+async def auth(data: dict):
+
+    telegram_id = data["id"]
+    name = data["first_name"]
 
     db = SessionLocal()
 
-    tasks = db.query(Task).filter(Task.user_id == user_id).all()
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+
+    if not user:
+        user = User(
+            telegram_id=telegram_id,
+            name=name
+        )
+
+        db.add(user)
+        db.commit()
+
+    return {"status": "ok"}
+
+
+@app.get("/tasks/{telegram_id}")
+async def get_tasks(telegram_id: int):
+
+    db = SessionLocal()
+
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+
+    if not user:
+        return []
+
+    tasks = db.query(Task).filter(Task.user_id == user.id).all()
 
     result = []
 
@@ -18,52 +46,29 @@ def get_tasks(user_id: int):
             "id": task.id,
             "text": task.text,
             "done": task.done,
-            "category": task.category
+            "category_id": task.category_id
         })
 
     return result
 
 
 @app.post("/tasks")
-def add_task(task: dict):
+async def add_task(data: dict):
+
+    telegram_id = data["telegram_id"]
+    text = data["text"]
 
     db = SessionLocal()
 
-    new_task = Task(
-        user_id=task["user_id"],
-        text=task["text"],
-        done=False,
-        category=task["category"]
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+
+    task = Task(
+        user_id=user.id,
+        text=text,
+        done=False
     )
 
-    db.add(new_task)
+    db.add(task)
     db.commit()
 
     return {"status": "ok"}
-
-
-@app.post("/toggle/{task_id}")
-def toggle_task(task_id: int):
-
-    db = SessionLocal()
-
-    task = db.query(Task).filter(Task.id == task_id).first()
-
-    task.done = not task.done
-
-    db.commit()
-
-    return {"status": "ok"}
-
-
-@app.delete("/tasks/{task_id}")
-def delete_task(task_id: int):
-
-    db = SessionLocal()
-
-    task = db.query(Task).filter(Task.id == task_id).first()
-
-    db.delete(task)
-    db.commit()
-
-    return {"status": "deleted"}
