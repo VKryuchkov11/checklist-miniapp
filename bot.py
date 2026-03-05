@@ -1,12 +1,19 @@
 import asyncio
 import os
+from dotenv import load_dotenv
+
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
 from aiogram.filters import Command
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
+load_dotenv()
+
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+if not BOT_TOKEN:
+    raise ValueError("BOT_TOKEN не найден! Проверь .env")
 
 bot = Bot(
     token=BOT_TOKEN,
