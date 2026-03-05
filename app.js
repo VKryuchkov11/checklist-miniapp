@@ -1,5 +1,23 @@
+const tg = window.Telegram.WebApp;
+const user = tg.initDataUnsafe.user;
+
+console.log("Telegram user:", user);
+
+if (user) {
+    fetch("http://localhost:8000/auth", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            telegram_id: user.id
+        })
+    });
+}
+
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let categories = JSON.parse(localStorage.getItem("categories")) || ["Общее"];
+let filter = "all";
 let currentCategory = "all";
 
 function saveData() {

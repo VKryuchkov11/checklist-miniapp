@@ -1,6 +1,8 @@
 import asyncio
 import os
 from dotenv import load_dotenv
+from database import init_db
+from reminders import reminder_loop
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
@@ -47,6 +49,11 @@ async def start(message: Message):
 
 
 async def main():
+    await dp.start_polling(bot)
+    await init_db()
+    await dp.start_polling(bot)
+    asyncio.create_task(reminder_loop(bot))
+
     await dp.start_polling(bot)
 
 
