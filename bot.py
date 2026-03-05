@@ -1,11 +1,12 @@
 import asyncio
+import os
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
 from aiogram.filters import Command
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
-BOT_TOKEN = "8699617462:AAFjbNF7w2p7jFhDbaVF9IAS8gwrNpqRUjU"
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Bot(
     token=BOT_TOKEN,
@@ -22,7 +23,9 @@ async def start(message: Message):
             [
                 KeyboardButton(
                     text="🚀 Открыть чек-лист",
-                    web_app=WebAppInfo(url="https://vkryuchkov11.github.io/checklist-miniapp/")
+                    web_app=WebAppInfo(
+                        url="https://vkryuchkov11.github.io/checklist-miniapp/"
+                    )
                 )
             ]
         ],
@@ -30,7 +33,7 @@ async def start(message: Message):
     )
 
     await message.answer(
-        "✨ <b>Мини-приложение Чек-лист</b>\n\n"
+        "✨ <b>Checklist Mini App</b>\n\n"
         "Нажми кнопку ниже 👇",
         reply_markup=keyboard
     )
