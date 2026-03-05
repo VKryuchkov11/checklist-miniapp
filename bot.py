@@ -33,7 +33,7 @@ async def start(message: Message):
                 KeyboardButton(
                     text="🚀 Открыть чек-лист",
                     web_app=WebAppInfo(
-                        url="https://vkryuchkov11.github.io/checklist-miniapp/"
+                        url="https://vkryuchkov11.github.io/checklist-miniapp/webapp/"
                     )
                 )
             ]
