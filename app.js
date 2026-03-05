@@ -1,24 +1,97 @@
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let categories = JSON.parse(localStorage.getItem("categories")) || ["Общее"];
 let filter = "all";
+let currentCategory = "all";
 
-function saveTasks() {
+function saveData() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
+    localStorage.setItem("categories", JSON.stringify(categories));
+}
+
+function addCategory() {
+
+    let input = document.getElementById("categoryInput");
+
+    if (input.value.trim() === "") return;
+
+    categories.push(input.value);
+
+    input.value = "";
+
+    saveData();
+    renderCategories();
+    renderCategorySelect();
+}
+
+function renderCategories() {
+
+    let container = document.getElementById("categories");
+
+    container.innerHTML = "";
+
+    let allBtn = document.createElement("button");
+    allBtn.innerText = "Все";
+    allBtn.onclick = () => {
+        currentCategory = "all";
+        renderTasks();
+    };
+
+    container.appendChild(allBtn);
+
+    categories.forEach(cat => {
+
+        let btn = document.createElement("button");
+
+        btn.innerText = cat;
+
+        btn.onclick = () => {
+
+            currentCategory = cat;
+            renderTasks();
+
+        };
+
+        container.appendChild(btn);
+
+    });
+
+}
+
+function renderCategorySelect() {
+
+    let select = document.getElementById("categorySelect");
+
+    select.innerHTML = "";
+
+    categories.forEach(cat => {
+
+        let option = document.createElement("option");
+
+        option.value = cat;
+        option.textContent = cat;
+
+        select.appendChild(option);
+
+    });
+
 }
 
 function addTask() {
 
     let input = document.getElementById("taskInput");
+    let category = document.getElementById("categorySelect").value;
 
     if (input.value.trim() === "") return;
 
     tasks.push({
         text: input.value,
-        done: false
+        done: false,
+        category: category
     });
 
     input.value = "";
 
-    saveTasks();
+    saveData();
     renderTasks();
     updateStats();
 }
@@ -27,7 +100,7 @@ function toggleTask(index) {
 
     tasks[index].done = !tasks[index].done;
 
-    saveTasks();
+    saveData();
     renderTasks();
     updateStats();
 }
@@ -36,15 +109,9 @@ function deleteTask(index) {
 
     tasks.splice(index, 1);
 
-    saveTasks();
+    saveData();
     renderTasks();
     updateStats();
-}
-
-function setFilter(type) {
-
-    filter = type;
-    renderTasks();
 }
 
 function renderTasks() {
@@ -55,17 +122,18 @@ function renderTasks() {
 
     let filtered = tasks.filter(task => {
 
-        if (filter === "active") return !task.done;
-        if (filter === "done") return task.done;
+        if (currentCategory === "all") return true;
 
-        return true;
+        return task.category === currentCategory;
+
     });
 
-    filtered.forEach((task) => {
+    filtered.forEach(task => {
 
         let realIndex = tasks.indexOf(task);
 
         let div = document.createElement("div");
+
         div.className = "task";
 
         if (task.done) div.classList.add("done");
@@ -74,6 +142,7 @@ function renderTasks() {
         <span onclick="toggleTask(${realIndex})">
         ${task.done ? "✅" : "⬜"} ${task.text}
         </span>
+        <small>${task.category}</small>
         <button onclick="deleteTask(${realIndex})">🗑</button>
         `;
 
@@ -95,23 +164,9 @@ function updateStats() {
 
     document.getElementById("progressFill").style.width = percent + "%";
 
-    if (percent === 100 && total > 0) {
-
-        let streak = Number(localStorage.getItem("streak") || 0);
-        streak++;
-
-        localStorage.setItem("streak", streak);
-
-        document.getElementById("streak").innerText = streak;
-
-    } else {
-
-        document.getElementById("streak").innerText =
-            localStorage.getItem("streak") || 0;
-
-    }
-
 }
 
+renderCategories();
+renderCategorySelect();
 renderTasks();
 updateStats();
