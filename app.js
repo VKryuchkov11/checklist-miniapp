@@ -1,6 +1,5 @@
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let categories = JSON.parse(localStorage.getItem("categories")) || ["Общее"];
-let filter = "all";
 let currentCategory = "all";
 
 function saveData() {
@@ -11,10 +10,16 @@ function saveData() {
 function addCategory() {
 
     let input = document.getElementById("categoryInput");
+    let name = input.value.trim();
 
-    if (input.value.trim() === "") return;
+    if (name === "") return;
 
-    categories.push(input.value);
+    if (categories.includes(name)) {
+        alert("Такая категория уже есть");
+        return;
+    }
+
+    categories.push(name);
 
     input.value = "";
 
@@ -31,6 +36,7 @@ function renderCategories() {
 
     let allBtn = document.createElement("button");
     allBtn.innerText = "Все";
+
     allBtn.onclick = () => {
         currentCategory = "all";
         renderTasks();
@@ -165,6 +171,22 @@ function updateStats() {
     document.getElementById("progressFill").style.width = percent + "%";
 
 }
+
+document.getElementById("taskInput").addEventListener("keypress", function(e) {
+
+    if (e.key === "Enter") {
+        addTask();
+    }
+
+});
+
+document.getElementById("categoryInput").addEventListener("keypress", function(e) {
+
+    if (e.key === "Enter") {
+        addCategory();
+    }
+
+});
 
 renderCategories();
 renderCategorySelect();
