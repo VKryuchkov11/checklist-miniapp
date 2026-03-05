@@ -15,7 +15,7 @@ function addCategory() {
     if (name === "") return;
 
     if (categories.includes(name)) {
-        alert("Такая категория уже есть");
+        alert("Такая категория уже существует");
         return;
     }
 
@@ -28,15 +28,58 @@ function addCategory() {
     renderCategorySelect();
 }
 
+function deleteCategory(cat) {
+
+    if (!confirm("Удалить категорию?")) return;
+
+    categories = categories.filter(c => c !== cat);
+
+    tasks = tasks.map(task => {
+        if (task.category === cat) {
+            task.category = "Общее";
+        }
+        return task;
+    });
+
+    saveData();
+    renderCategories();
+    renderCategorySelect();
+    renderTasks();
+}
+
+function editCategory(cat) {
+
+    let newName = prompt("Новое имя категории:", cat);
+
+    if (!newName || newName.trim() === "") return;
+
+    if (categories.includes(newName)) {
+        alert("Такая категория уже есть");
+        return;
+    }
+
+    categories = categories.map(c => c === cat ? newName : c);
+
+    tasks = tasks.map(task => {
+        if (task.category === cat) {
+            task.category = newName;
+        }
+        return task;
+    });
+
+    saveData();
+    renderCategories();
+    renderCategorySelect();
+    renderTasks();
+}
+
 function renderCategories() {
 
     let container = document.getElementById("categories");
-
     container.innerHTML = "";
 
     let allBtn = document.createElement("button");
     allBtn.innerText = "Все";
-
     allBtn.onclick = () => {
         currentCategory = "all";
         renderTasks();
@@ -48,13 +91,15 @@ function renderCategories() {
 
         let btn = document.createElement("button");
 
-        btn.innerText = cat;
+        btn.innerHTML = `
+        ${cat}
+        <span onclick="editCategory('${cat}')">✏️</span>
+        <span onclick="deleteCategory('${cat}')">❌</span>
+        `;
 
         btn.onclick = () => {
-
             currentCategory = cat;
             renderTasks();
-
         };
 
         container.appendChild(btn);
@@ -113,11 +158,25 @@ function toggleTask(index) {
 
 function deleteTask(index) {
 
+    if (!confirm("Удалить задачу?")) return;
+
     tasks.splice(index, 1);
 
     saveData();
     renderTasks();
     updateStats();
+}
+
+function editTask(index) {
+
+    let newText = prompt("Редактировать задачу:", tasks[index].text);
+
+    if (!newText || newText.trim() === "") return;
+
+    tasks[index].text = newText;
+
+    saveData();
+    renderTasks();
 }
 
 function renderTasks() {
@@ -148,8 +207,13 @@ function renderTasks() {
         <span onclick="toggleTask(${realIndex})">
         ${task.done ? "✅" : "⬜"} ${task.text}
         </span>
+
         <small>${task.category}</small>
+
+        <div>
+        <button onclick="editTask(${realIndex})">✏️</button>
         <button onclick="deleteTask(${realIndex})">🗑</button>
+        </div>
         `;
 
         container.appendChild(div);
