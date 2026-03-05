@@ -1,19 +1,25 @@
 const tg = window.Telegram.WebApp;
-const user = tg.initDataUnsafe.user;
 
-console.log("Telegram user:", user);
+async function authUser() {
 
-if (user) {
-    fetch("http://localhost:8000/auth", {
+    const user = tg.initDataUnsafe.user;
+
+    if (!user) return;
+
+    await fetch("http://localhost:8000/auth", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            telegram_id: user.id
+            id: user.id,
+            first_name: user.first_name
         })
     });
+
 }
+
+authUser();
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let categories = JSON.parse(localStorage.getItem("categories")) || ["Общее"];

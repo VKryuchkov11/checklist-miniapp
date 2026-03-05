@@ -8,7 +8,7 @@ async def init_db():
 
         await db.execute("""
         CREATE TABLE IF NOT EXISTS users(
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             telegram_id INTEGER UNIQUE
         )
         """)

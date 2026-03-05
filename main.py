@@ -13,15 +13,20 @@ async def auth(data: dict):
 
     db = SessionLocal()
 
-    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+    try:
 
-    if not user:
-        user = User(
-            telegram_id=telegram_id,
-            name=name
-        )
+        user = db.query(User).filter(User.telegram_id == telegram_id).first()
 
-        db.add(user)
-        db.commit()
+        if not user:
+            user = User(
+                telegram_id=telegram_id,
+                name=name
+            )
 
-    return {"status": "ok"}
+            db.add(user)
+            db.commit()
+
+        return {"status": "ok"}
+
+    finally:
+        db.close()
