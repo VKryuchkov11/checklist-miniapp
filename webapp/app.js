@@ -4,6 +4,8 @@ async function authUser() {
 
     const user = tg.initDataUnsafe.user;
 
+    console.log("Telegram user:", user);
+
     if (!user) return;
 
     await fetch("http://localhost:8000/auth", {
@@ -12,8 +14,7 @@ async function authUser() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            id: user.id,
-            first_name: user.first_name
+            telegram_id: user.id
         })
     });
 
