@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let filter = "all";
 
@@ -119,4 +120,3 @@ updateStats();
 
 new Sortable(tasks, {
     animation: 150
-});
