@@ -1,216 +1,152 @@
 body {
-<<<<<<< HEAD
-
-    background: #191919;
-    color: #e6e6e6;
-
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial;
-
     margin: 0;
-    padding: 30px;
-
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0f0f10;
+    color: #e6e6e6;
+    padding: 20px;
 }
 
 /* Заголовок */
 
 h1 {
-
-    font-size: 28px;
-    font-weight: 600;
-
-    margin-bottom: 25px;
-
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 /* Статистика */
 
 .stats {
-
     display: flex;
     justify-content: space-between;
-
-    margin-bottom: 15px;
-
-    color: #b5b5b5;
-
+    margin-bottom: 10px;
 }
 
-/* Прогресс бар */
+/* Прогресс */
 
 .progress-bar {
-
     width: 100%;
     height: 8px;
-
-    background: #2a2a2a;
-    border-radius: 6px;
-
-    margin-bottom: 25px;
-
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
 }
 
 #progressFill {
-
     height: 100%;
     width: 0%;
-
-    background: #7a1f2b;
-
-    border-radius: 6px;
-
-    transition: width 0.4s ease;
-
+    background: #7b1e3a;
+    transition: width 0.3s;
 }
 
 /* Панель ввода */
 
 .input-panel {
-
     display: flex;
     gap: 10px;
-
-    margin-bottom: 25px;
-
+    margin-bottom: 20px;
 }
 
-#taskInput {
-
+input {
     flex: 1;
-
-    background: #242424;
-    border: 1px solid #2f2f2f;
-
-    color: white;
-
-    padding: 12px;
+    padding: 10px;
     border-radius: 8px;
-
-    font-size: 14px;
-
-}
-
-#taskInput:focus {
-
-    outline: none;
-    border: 1px solid #7a1f2b;
-
-}
-
-/* Кнопка добавить */
-
-.input-panel button {
-
-    background: #7a1f2b;
     border: none;
-
+    background: #1c1c1e;
     color: white;
-
-    padding: 12px 18px;
-    border-radius: 8px;
-
-    font-size: 16px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-
 }
 
-.input-panel button:hover {
+select {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #1c1c1e;
+    color: white;
+}
 
-    background: #9e2837;
+button {
+    background: #7b1e3a;
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
+button:hover {
+    background: #a22a4c;
+}
+
+/* Категории */
+
+.category-panel {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+#categories {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+#categories button {
+    background: #1c1c1e;
+    border: 1px solid #333;
+    padding: 6px 10px;
+}
+
+#categories button:hover {
+    background: #7b1e3a;
 }
 
 /* Фильтры */
 
 .filters {
-
     display: flex;
     gap: 10px;
-
-    margin-bottom: 25px;
-
+    margin-bottom: 20px;
 }
 
-.filters button {
-
-    background: #242424;
-    border: 1px solid #2f2f2f;
-
-    color: #cfcfcf;
-
-    padding: 8px 14px;
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-
-}
-
-.filters button:hover {
-
-    background: #7a1f2b;
-    border-color: #7a1f2b;
-
-}
-
-/* Список задач */
+/* Карточки задач */
 
 .task {
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    background: #202020;
-
-    padding: 12px 14px;
-    margin-bottom: 8px;
-
-    border-radius: 8px;
-
-    border: 1px solid #2a2a2a;
-
+    background: #1a1a1c;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
     transition: 0.2s;
-
 }
 
 .task:hover {
-
-    border-color: #7a1f2b;
-
+    transform: translateY(-2px);
+    background: #202022;
 }
 
-/* Выполненная задача */
-
-.task.done {
-
-    opacity: 0.6;
-    text-decoration: line-through;
-
-}
-
-/* Кнопка удаления */
-
-.task button {
-
-    background: none;
-    border: none;
-
+.task span {
     cursor: pointer;
-
-    font-size: 16px;
-
 }
 
-/* Streak */
+.task small {
+    color: #999;
+    margin-left: 10px;
+}
+
+.task.done span {
+    text-decoration: line-through;
+    color: #777;
+}
+
+/* Стрик */
 
 .streak {
-
-    margin-top: 25px;
-
-    color: #b5b5b5;
-
-    font-size: 14px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 18px;
+}
